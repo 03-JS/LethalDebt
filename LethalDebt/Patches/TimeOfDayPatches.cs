@@ -8,7 +8,7 @@ namespace LethalDebt.Patches
         [HarmonyPrefix]
         static bool FirePlayers(TimeOfDay __instance)
         {
-            if (Plugin.Instance.enabled && TerminalPatches.terminal.groupCredits < 0)
+            if (Plugin.Instance.enabled && TerminalPatches.terminal.groupCredits < 0 && Plugin.Instance.currentQuota == Plugin.Instance.quotaDeadline.Value)
             {
                 GameNetworkManager.Instance.gameHasStarted = true;
                 StartOfRound.Instance.firingPlayersCutsceneRunning = true;
@@ -19,8 +19,11 @@ namespace LethalDebt.Patches
                     StartOfRound.Instance.gameStats.deaths,
                     StartOfRound.Instance.gameStats.allStepsTaken
                 }, false);
+                Plugin.Instance.currentQuota = 1;
                 return false;
             }
+            HUDManager.Instance.DisplayTip("REMINDER", $"You have {Plugin.Instance.quotaDeadline.Value - Plugin.Instance.currentQuota} quota(s) left to pay off your debt!");
+            Plugin.Instance.currentQuota++;
             return true;
         }
     }

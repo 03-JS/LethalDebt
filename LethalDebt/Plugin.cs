@@ -28,9 +28,14 @@ namespace LethalDebt
 
         // Limits how far into the negatives you can go to avoid the credits overflowing
         public const int DEBT_LIMIT = -100000000;
+        
+        // Current quota
+        public int currentQuota = 1;
 
         // Config
+        public ConfigEntry<int> quotaDeadline;
         public ConfigEntry<string> debtColor;
+        public ConfigEntry<bool> applyDeathPenaltyDebt;
 
         void Awake()
         {
@@ -91,6 +96,18 @@ namespace LethalDebt
             {
                 Utils.SetCreditsColorToDebt();
             };
+            quotaDeadline = Config.Bind(
+                "Customization", // Config section
+                "Deadline", // Key of this config
+                1, // Default value
+                new ConfigDescription("By which quota do you have to pay off your debt?", new AcceptableValueRange<int>(1, 3)) // Description
+            );
+            applyDeathPenaltyDebt = Config.Bind(
+                "Customization", // Config section
+                "Death penalty counts towards debt", // Key of this config
+                true, // Default value
+                "Can the amount subtracted by the death penalty make you go into debt?" // Description
+            );
         }
     }
 }

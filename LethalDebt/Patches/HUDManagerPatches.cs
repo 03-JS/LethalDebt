@@ -41,7 +41,7 @@ namespace LethalDebt.Patches
         [HarmonyPrefix]
         static bool CalculatePenaltyWithDebt(HUDManager __instance, int playersDead, int bodiesInsured)
         {
-            if (TerminalPatches.terminal.groupCredits < 0)
+            if (/* TerminalPatches.terminal.groupCredits < 0 && */ Plugin.Instance.applyDeathPenaltyDebt.Value)
             {
                 float num = 0.2f;
                 int groupCredits = TerminalPatches.terminal.groupCredits;
@@ -52,11 +52,11 @@ namespace LethalDebt.Patches
                 }
                 for (int j = 0; j < bodiesInsured; j++)
                 {
-                    TerminalPatches.terminal.groupCredits += (int)((float)groupCredits * (num / 2.5f));
+                    TerminalPatches.terminal.groupCredits += (int)(groupCredits * (num / 2.5f));
                 }
-                __instance.statsUIElements.penaltyAddition.text = string.Format("{0} casualties: -{1}%\n({2} bodies recovered)", playersDead, 5f * 100f * (float)(playersDead - bodiesInsured), bodiesInsured);
-                __instance.statsUIElements.penaltyTotal.text = string.Format("DUE: ${0}", groupCredits - TerminalPatches.terminal.groupCredits);
-                Debug.Log(string.Format("New group credits after penalty: {0}", TerminalPatches.terminal.groupCredits));
+                __instance.statsUIElements.penaltyAddition.text = $"{playersDead} casualties: -{5f * 100f * (playersDead - bodiesInsured)}%\n({bodiesInsured} bodies recovered)";
+                __instance.statsUIElements.penaltyTotal.text = $"DUE: ${groupCredits - TerminalPatches.terminal.groupCredits}";
+                Plugin.mls.LogDebug($"New group credits after penalty: {TerminalPatches.terminal.groupCredits}");
                 return false;
             }
             return true;
