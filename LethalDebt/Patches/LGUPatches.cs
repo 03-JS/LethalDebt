@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using MoreShipUpgrades.UI.Application;
 using System.Linq;
 using System.Reflection.Emit;
-using UnityEngine;
 using MoreShipUpgrades.UI.TerminalNodes;
 
 namespace LethalDebt.Patches
 {
     internal class LGUPatches
     {
-        [HarmonyPatch(typeof(UpgradeStoreApplication), "BuyUpgrade")]
+        [HarmonyPatch("MoreShipUpgrades.UI.Application.UpgradeStoreApplication", "BuyUpgrade")]
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
@@ -25,7 +24,7 @@ namespace LethalDebt.Patches
                     {
                         codes[i + j].opcode = OpCodes.Nop;
                     }
-                    Plugin.Instance.LogToConsole("Removed LGU purchasing restrictions", "debug");
+                    Plugin.mls.LogDebug("Removed LGU purchasing restrictions");
                     break;
                 }
             }
@@ -33,7 +32,7 @@ namespace LethalDebt.Patches
             return codes.AsEnumerable();
         }
 
-        [HarmonyPatch(typeof(UpgradeStoreApplication), "BuyUpgrade")]
+        [HarmonyPatch("MoreShipUpgrades.UI.Application.UpgradeStoreApplication", "BuyUpgrade")]
         [HarmonyPrefix]
         static bool PreventClientGriefing(CustomTerminalNode node)
         {
@@ -41,7 +40,7 @@ namespace LethalDebt.Patches
             return true;
         }
 
-        [HarmonyPatch(typeof(UpgradeStoreApplication), "PurchaseUpgrade")]
+        [HarmonyPatch("MoreShipUpgrades.UI.Application.UpgradeStoreApplication", "PurchaseUpgrade")]
         [HarmonyPostfix]
         static void UpdateCreditsColorAfterPurchase()
         {

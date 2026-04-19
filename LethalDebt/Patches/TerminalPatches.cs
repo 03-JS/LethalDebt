@@ -30,7 +30,7 @@ namespace LethalDebt.Patches
                     {
                         codes[i + j].opcode = OpCodes.Nop; // Adjust index for the block
                     }
-                    Plugin.Instance.LogToConsole("Purchasing restrictions removed", "debug");
+                    Plugin.mls.LogDebug("Purchasing restrictions removed");
                     break;
                 }
             }
@@ -42,7 +42,7 @@ namespace LethalDebt.Patches
                 {
                     codes[i].opcode = OpCodes.Ldc_I4;
                     codes[i].operand = Plugin.DEBT_LIMIT;
-                    Plugin.Instance.LogToConsole("New min credit limit set", "debug");
+                    Plugin.mls.LogDebug("New min credit limit set");
                     // break;
                 }
             }
@@ -90,7 +90,7 @@ namespace LethalDebt.Patches
         [HarmonyPostfix]
         static void ChangeCreditsColorAfterSellingClientRpc()
         {
-            Plugin.Instance.LogToConsole("Credits color reverted to default", "debug");
+            Plugin.mls.LogDebug("Credits color reverted to default");
             terminal.topRightText.color = terminalCreditsColor;
         }
 

@@ -1,23 +1,23 @@
 ﻿using BepInEx;
-using BepInEx.Bootstrap;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using LethalDebt.Patches;
-using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using BepInEx.Bootstrap;
 using UnityEngine;
 using static BepInEx.BepInDependency;
 
 namespace LethalDebt
 {
     [BepInPlugin(modGUID, modName, modVersion)]
-    [BepInDependency("BMX.LobbyCompatibility", DependencyFlags.SoftDependency)]
+    [BepInDependency("com.malco.lethalcompany.moreshipupgrades", DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         private const string modGUID = "JS03.LethalDebt";
         private const string modName = "Lethal Debt";
-        private const string modVersion = "1.0.0";
+        private const string modVersion = "1.1.0";
 
         private readonly Harmony harmony = new Harmony(modGUID);
         public static Plugin Instance;
@@ -45,6 +45,7 @@ namespace LethalDebt
             var types = Assembly.GetExecutingAssembly().GetTypes();
             foreach (var type in types)
             {
+                if (type.Name == "LGUPatches") continue;
                 var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
                 foreach (var method in methods)
                 {
@@ -67,8 +68,14 @@ namespace LethalDebt
             harmony.PatchAll(typeof(TimeOfDayPatches));
             harmony.PatchAll(typeof(HUDManagerPatches));
             harmony.PatchAll(typeof(GameNetworkManagerPatches));
-            if (Chainloader.PluginInfos.ContainsKey("com.malco.lethalcompany.moreshipupgrades")) harmony.PatchAll(typeof(LGUPatches));
+            if (Chainloader.PluginInfos.ContainsKey("com.malco.lethalcompany.moreshipupgrades")) PatchLGU();
             mls.LogInfo("Patches applied!");
+        }
+        
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        void PatchLGU()
+        {
+            harmony.PatchAll(typeof(LGUPatches));
         }
 
         void GenerateConfig()
@@ -84,25 +91,6 @@ namespace LethalDebt
             {
                 Utils.ChangeTerminalCreditsColor(debtColor.Value);
             };
-        }
-
-        public void LogToConsole(string message, string logType = "")
-        {
-            switch (logType.ToLower())
-            {
-                case "warn":
-                    mls.LogWarning(message);
-                    break;
-                case "error":
-                    mls.LogError(message);
-                    break;
-                case "debug":
-                    mls.LogDebug(message);
-                    break;
-                default:
-                    mls.LogInfo(message);
-                    break;
-            }
         }
     }
 }

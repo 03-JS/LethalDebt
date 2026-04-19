@@ -18,7 +18,7 @@ namespace LethalDebt
         [ClientRpc]
         public void EnableClientRpc()
         {
-            Plugin.Instance.LogToConsole("The host has Lethal Debt!", "debug");
+            Plugin.mls.LogDebug("The host has Lethal Debt!");
             Plugin.Instance.enabled = true;
         }
     }

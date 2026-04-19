@@ -14,7 +14,7 @@ namespace LethalDebt.Patches
         {
             __instance.gameObject.AddComponent<NetworkHelper>();
             __instance.gameObject.AddComponent<NetworkObject>();
-            Plugin.Instance.LogToConsole("Network Helper has been added", "debug");
+            Plugin.mls.LogDebug("Network Helper has been added");
         }
     }
 }
