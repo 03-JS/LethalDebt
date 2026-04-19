@@ -89,7 +89,7 @@ namespace LethalDebt
             );
             debtColor.SettingChanged += (obj, args) =>
             {
-                Utils.ChangeTerminalCreditsColor(debtColor.Value);
+                Utils.SetCreditsColorToDebt();
             };
         }
     }

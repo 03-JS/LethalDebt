@@ -44,7 +44,7 @@ namespace LethalDebt.Patches
         [HarmonyPostfix]
         static void UpdateCreditsColorAfterPurchase()
         {
-            Utils.ChangeTerminalCreditsColor(Plugin.Instance.debtColor.Value);
+            Utils.SetCreditsColorToDebt();
         }
     }
 }

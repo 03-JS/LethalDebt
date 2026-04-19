@@ -74,7 +74,7 @@ namespace LethalDebt.Patches
         [HarmonyPostfix]
         static void ChangeCreditsColorAfterPurchase(Terminal __instance)
         {
-            Utils.ChangeTerminalCreditsColor(Plugin.Instance.debtColor.Value);
+            Utils.SetCreditsColorToDebt();
         }
         
         [HarmonyPatch("BeginUsingTerminal")]
@@ -82,7 +82,7 @@ namespace LethalDebt.Patches
         static void ChangeCreditsColorOnTerminalOpen(Terminal __instance)
         {
             if (terminal.groupCredits >= 0) terminalCreditsColor = terminal.topRightText.color;
-            Utils.ChangeTerminalCreditsColor(Plugin.Instance.debtColor.Value);
+            Utils.SetCreditsColorToDebt();
         }
 
         // Not really terminal patches but they kinda count
@@ -100,7 +100,7 @@ namespace LethalDebt.Patches
         {
             terminal = __instance;
             terminalCreditsColor = terminal.topRightText.color;
-            Utils.ChangeTerminalCreditsColor(Plugin.Instance.debtColor.Value);
+            Utils.SetCreditsColorToDebt();
         }
     }
 }
