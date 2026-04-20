@@ -4,8 +4,6 @@ using BepInEx.Logging;
 using HarmonyLib;
 using LethalDebt.Patches;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using BepInEx.Bootstrap;
 using UnityEngine;
 using static BepInEx.BepInDependency;
 
@@ -73,14 +71,7 @@ namespace LethalDebt
             harmony.PatchAll(typeof(TimeOfDayPatches));
             harmony.PatchAll(typeof(HUDManagerPatches));
             harmony.PatchAll(typeof(GameNetworkManagerPatches));
-            if (Chainloader.PluginInfos.ContainsKey("com.malco.lethalcompany.moreshipupgrades")) PatchLGU();
             mls.LogInfo("Patches applied!");
-        }
-        
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        void PatchLGU()
-        {
-            harmony.PatchAll(typeof(LGUPatches));
         }
 
         void GenerateConfig()

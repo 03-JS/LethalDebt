@@ -24,7 +24,7 @@
       <HintPath>bin\Debug\netstandard2.1\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="MoreShipUpgrades">
-      <HintPath>..\..\..\1. DLLs\publicized_assemblies\MoreShipUpgrades-publicized.dll</HintPath>
+      <HintPath>..\..\..\1. DLLs\MoreShipUpgrades.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Netcode.Components">
       <HintPath>..\..\..\..\..\..\..\mnt\NVMe\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Unity.Netcode.Components.dll</HintPath>

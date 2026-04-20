@@ -1,5 +1,5 @@
-﻿using HarmonyLib;
-using Unity.Netcode;
+﻿using BepInEx.Bootstrap;
+using HarmonyLib;
 
 namespace LethalDebt.Patches
 {
@@ -12,6 +12,7 @@ namespace LethalDebt.Patches
             if (!__instance.IsHost)
             {
                 Plugin.Instance.enabled = false;
+                if (Chainloader.PluginInfos.ContainsKey("com.malco.lethalcompany.moreshipupgrades")) LGUHandler.DisallowOverspending();
             }
         }
 

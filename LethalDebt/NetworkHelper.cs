@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+﻿using BepInEx.Bootstrap;
 using Unity.Netcode;
 
 namespace LethalDebt
@@ -20,6 +17,7 @@ namespace LethalDebt
         {
             Plugin.mls.LogDebug("The host has Lethal Debt!");
             Plugin.Instance.enabled = true;
+            if (Chainloader.PluginInfos.ContainsKey("com.malco.lethalcompany.moreshipupgrades")) LGUHandler.AllowOverspending();
         }
     }
 }
