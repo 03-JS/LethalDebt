@@ -4,6 +4,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using LethalDebt.Patches;
 using System.Reflection;
+using BepInEx.Bootstrap;
 using UnityEngine;
 using static BepInEx.BepInDependency;
 
@@ -43,6 +44,7 @@ namespace LethalDebt
             mls.LogInfo("Lethal Debt is awake");
 
             enabled = true;
+            if (Chainloader.PluginInfos.ContainsKey("com.malco.lethalcompany.moreshipupgrades")) LGUHandler.AllowOverspending();
 
             // Netcode Patcher
             var types = Assembly.GetExecutingAssembly().GetTypes();
