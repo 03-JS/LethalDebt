@@ -26,11 +26,8 @@ namespace LethalDebt
         public bool enabled;
 
         // Limits how far into the negatives you can go to avoid the credits overflowing
-        public const int DEBT_LIMIT = -100000000;
+        public const int DEBT_LIMIT = -2147483647; // 32-bit integer limit
         
-        // Current quota
-        public int currentQuota = 1;
-
         // Config
         public ConfigEntry<int> quotaDeadline;
         public ConfigEntry<string> debtColor;

@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using System.Collections;
+using HarmonyLib;
+using UnityEngine;
 
 namespace LethalDebt.Patches
 {
@@ -8,7 +10,7 @@ namespace LethalDebt.Patches
         [HarmonyPrefix]
         static bool FirePlayers(TimeOfDay __instance)
         {
-            if (Plugin.Instance.enabled && TerminalPatches.terminal.groupCredits < 0 && Plugin.Instance.currentQuota == Plugin.Instance.quotaDeadline.Value)
+            if (Plugin.Instance.enabled && TerminalPatches.terminal.groupCredits < 0 && __instance.timesFulfilledQuota == Plugin.Instance.quotaDeadline.Value - 1) // offset by 1 because it's a prefix and it runs before timesFulfilledQuota increases
             {
                 GameNetworkManager.Instance.gameHasStarted = true;
                 StartOfRound.Instance.firingPlayersCutsceneRunning = true;
@@ -19,12 +21,22 @@ namespace LethalDebt.Patches
                     StartOfRound.Instance.gameStats.deaths,
                     StartOfRound.Instance.gameStats.allStepsTaken
                 }, false);
-                Plugin.Instance.currentQuota = 1;
                 return false;
             }
-            HUDManager.Instance.DisplayTip("REMINDER", $"You have {Plugin.Instance.quotaDeadline.Value - Plugin.Instance.currentQuota} quota(s) left to pay off your debt!");
-            Plugin.Instance.currentQuota++;
             return true;
+        }
+
+        [HarmonyPatch(typeof(TimeOfDay), "SetNewProfitQuota")]
+        [HarmonyPostfix]
+        static void DisplayTip(TimeOfDay __instance)
+        {
+            if (__instance.timesFulfilledQuota != Plugin.Instance.quotaDeadline.Value - 1) Utils.StartCoroutine(DisplayDebtReminder(__instance));
+        }
+        
+        static IEnumerator DisplayDebtReminder(TimeOfDay Instance)
+        {
+            yield return new WaitForSeconds(3f);
+            HUDManager.Instance.DisplayTip("REMINDER", $"You have {Plugin.Instance.quotaDeadline.Value - Instance.timesFulfilledQuota} quota(s) left to pay off your debt!");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using LethalDebt.Patches;
+﻿using System.Collections;
+using LethalDebt.Patches;
 using UnityEngine;
 
 namespace LethalDebt
@@ -13,5 +14,26 @@ namespace LethalDebt
                 TerminalPatches.terminal.topRightText.color = color;
             }
         }
+        
+        public static Coroutine StartCoroutine(IEnumerator routine)
+        {
+            return CorroutineInstance.StartCoroutine(routine);
+        }
+
+        private static MonoBehaviour CorroutineInstance
+        {
+            get
+            {
+                if (_corroutineInstance == null)
+                {
+                    _corroutineInstance = new GameObject("CoroutineManager").AddComponent<CoroutineManagerBehaviour>();
+                }
+                return _corroutineInstance;
+            }
+        }
+
+        private static MonoBehaviour _corroutineInstance;
+
+        internal class CoroutineManagerBehaviour : MonoBehaviour { }
     }
 }
