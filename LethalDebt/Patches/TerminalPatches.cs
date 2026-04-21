@@ -98,20 +98,20 @@ namespace LethalDebt.Patches
         
         [HarmonyPatch("BeginUsingTerminal")]
         [HarmonyPostfix]
-        static void ChangeCreditsColorOnTerminalOpen()
+        static void ChangeCreditsColorOnTerminalOpen(Terminal __instance)
         {
-            if (terminal.groupCredits >= 0) terminalCreditsColor = terminal.topRightText.color;
+            if (__instance.groupCredits >= 0) terminalCreditsColor = __instance.topRightText.color;
             Utils.SetCreditsColorToDebt();
         }
 
         // Not really terminal patches but they kinda count
         [HarmonyPatch(typeof(DepositItemsDesk), "SellItemsClientRpc")]
         [HarmonyPostfix]
-        static void ChangeCreditsColorAfterSellingClientRpc()
+        static void ChangeCreditsColorAfterSellingClientRpc(Terminal __instance)
         {
-            if (terminal.groupCredits < 0) return;
+            if (__instance.groupCredits < 0) return;
             Plugin.mls.LogDebug("Credits color reverted to default");
-            terminal.topRightText.color = terminalCreditsColor;
+            __instance.topRightText.color = terminalCreditsColor;
         }
     }
 }
