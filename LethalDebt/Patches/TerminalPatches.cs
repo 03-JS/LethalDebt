@@ -22,14 +22,11 @@ namespace LethalDebt.Patches
             Utils.SetCreditsColorToDebt();
         }
 
-        [HarmonyPatch("Update")]
+        [HarmonyPatch("LoadNewNodeIfAffordable")]
         [HarmonyPostfix]
         static void ShowDebtWithMultiplier(Terminal __instance)
-        {
-            if (__instance.terminalInUse)
-            {
-                __instance.topRightText.text = __instance.groupCredits < 0 ? $"${__instance.groupCredits * Plugin.Instance.debtMultiplier.Value}" : $"${__instance.groupCredits}";
-            }
+        { 
+            __instance.groupCredits = (int)(__instance.groupCredits < 0 ? __instance.groupCredits * Plugin.Instance.debtMultiplier.Value : __instance.groupCredits);
         }
         
         [HarmonyPatch("LoadNewNodeIfAffordable")]
@@ -100,7 +97,7 @@ namespace LethalDebt.Patches
         [HarmonyPostfix]
         static void ChangeCreditsColorOnTerminalOpen(Terminal __instance)
         {
-            if (__instance.groupCredits >= 0) terminalCreditsColor = __instance.topRightText.color;
+            if (__instance.groupCredits >= 0) __instance.topRightText.color = terminalCreditsColor;
             Utils.SetCreditsColorToDebt();
         }
 
