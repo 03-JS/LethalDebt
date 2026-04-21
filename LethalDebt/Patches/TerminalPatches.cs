@@ -28,7 +28,7 @@ namespace LethalDebt.Patches
         {
             if (__instance.terminalInUse)
             {
-                __instance.topRightText.text = $"${__instance.groupCredits * Plugin.Instance.debtMultiplier.Value}";
+                __instance.topRightText.text = __instance.groupCredits < 0 ? $"${__instance.groupCredits * Plugin.Instance.debtMultiplier.Value}" : $"${__instance.groupCredits}";
             }
         }
         
