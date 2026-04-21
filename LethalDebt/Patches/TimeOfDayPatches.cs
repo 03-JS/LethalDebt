@@ -10,7 +10,7 @@ namespace LethalDebt.Patches
         [HarmonyPrefix]
         static bool FirePlayers(TimeOfDay __instance)
         {
-            if (Plugin.Instance.enabled && TerminalPatches.terminal.groupCredits < 0 && __instance.timesFulfilledQuota == Plugin.Instance.quotaDeadline.Value - 1) // offset by 1 because it's a prefix and it runs before timesFulfilledQuota increases
+            if (Plugin.Instance.enabled && TerminalPatches.terminal.groupCredits < 0 && __instance.timesFulfilledQuota == Plugin.Instance.deadline - 1) // offset by 1 because it's a prefix and it runs before timesFulfilledQuota increases
             {
                 GameNetworkManager.Instance.gameHasStarted = true;
                 StartOfRound.Instance.firingPlayersCutsceneRunning = true;
@@ -30,7 +30,8 @@ namespace LethalDebt.Patches
         [HarmonyPostfix]
         static void DisplayTip(TimeOfDay __instance)
         {
-            if (__instance.timesFulfilledQuota != Plugin.Instance.quotaDeadline.Value - 1 && TerminalPatches.terminal.groupCredits < 0) Utils.StartCoroutine(DisplayDebtReminder(__instance));
+            if (__instance.timesFulfilledQuota != Plugin.Instance.deadline - 1 && TerminalPatches.terminal.groupCredits < 0) Utils.StartCoroutine(DisplayDebtReminder(__instance));
+            else Plugin.Instance.deadline += __instance.timesFulfilledQuota;
         }
         
         static IEnumerator DisplayDebtReminder(TimeOfDay Instance)

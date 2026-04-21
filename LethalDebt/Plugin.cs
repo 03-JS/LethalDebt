@@ -25,6 +25,9 @@ namespace LethalDebt
         // Networking
         public bool enabled;
 
+        // Deadline
+        public int deadline;
+        
         // Limits how far into the negatives you can go to avoid the credits overflowing
         public const int DEBT_LIMIT = -2147483647; // 32-bit integer limit
         
@@ -99,6 +102,7 @@ namespace LethalDebt
                 1, // Default value
                 new ConfigDescription("By which quota do you have to pay off your debt?", new AcceptableValueRange<int>(1, 3)) // Description
             );
+            deadline = quotaDeadline.Value;
             applyDeathPenaltyDebt = Config.Bind(
                 "Customization", // Config section
                 "Death penalty counts towards debt", // Key of this config
