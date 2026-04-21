@@ -95,7 +95,7 @@ namespace LethalDebt
             );
             quotaDeadline = Config.Bind(
                 "Customization", // Config section
-                "Deadline", // Key of this config
+                "Quota deadline", // Key of this config
                 1, // Default value
                 new ConfigDescription("By which quota do you have to pay off your debt?", new AcceptableValueRange<int>(1, 3)) // Description
             );
