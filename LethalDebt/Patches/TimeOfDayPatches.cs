@@ -14,15 +14,16 @@ namespace LethalDebt.Patches
             {
                 GameNetworkManager.Instance.gameHasStarted = true;
                 StartOfRound.Instance.firingPlayersCutsceneRunning = true;
-                StartOfRound.Instance.FirePlayersAfterDeadlineClientRpc(new int[]
+                StartOfRound.Instance.FirePlayersAfterDeadlineClientRpc(new[]
                 {
                     StartOfRound.Instance.gameStats.daysSpent,
                     StartOfRound.Instance.gameStats.scrapValueCollected,
                     StartOfRound.Instance.gameStats.deaths,
                     StartOfRound.Instance.gameStats.allStepsTaken
-                }, false);
+                });
                 return false;
             }
+            if (TerminalPatches.terminal.groupCredits >= 0) Plugin.Instance.deadline += __instance.timesFulfilledQuota;
             return true;
         }
 
@@ -31,7 +32,6 @@ namespace LethalDebt.Patches
         static void DisplayTip(TimeOfDay __instance)
         {
             if (__instance.timesFulfilledQuota != Plugin.Instance.deadline - 1 && TerminalPatches.terminal.groupCredits < 0) Utils.StartCoroutine(DisplayDebtReminder(__instance));
-            else Plugin.Instance.deadline += __instance.timesFulfilledQuota;
         }
         
         static IEnumerator DisplayDebtReminder(TimeOfDay Instance)
