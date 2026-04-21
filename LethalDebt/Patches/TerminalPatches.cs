@@ -13,6 +13,25 @@ namespace LethalDebt.Patches
         public static Terminal terminal;
         private static Color terminalCreditsColor;
 
+        [HarmonyPatch("Start")]
+        [HarmonyPostfix]
+        static void GetTerminal(Terminal __instance)
+        {
+            terminal = __instance;
+            terminalCreditsColor = terminal.topRightText.color;
+            Utils.SetCreditsColorToDebt();
+        }
+
+        [HarmonyPatch("Update")]
+        [HarmonyPostfix]
+        static void ShowDebtWithMultiplier(Terminal __instance)
+        {
+            if (__instance.terminalInUse)
+            {
+                __instance.topRightText.text = $"${__instance.groupCredits * Plugin.Instance.debtMultiplier.Value}";
+            }
+        }
+        
         [HarmonyPatch("LoadNewNodeIfAffordable")]
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
@@ -72,14 +91,14 @@ namespace LethalDebt.Patches
 
         [HarmonyPatch("LoadNewNodeIfAffordable")]
         [HarmonyPostfix]
-        static void ChangeCreditsColorAfterPurchase(Terminal __instance)
+        static void ChangeCreditsColorAfterPurchase()
         {
             Utils.SetCreditsColorToDebt();
         }
         
         [HarmonyPatch("BeginUsingTerminal")]
         [HarmonyPostfix]
-        static void ChangeCreditsColorOnTerminalOpen(Terminal __instance)
+        static void ChangeCreditsColorOnTerminalOpen()
         {
             if (terminal.groupCredits >= 0) terminalCreditsColor = terminal.topRightText.color;
             Utils.SetCreditsColorToDebt();
@@ -90,17 +109,9 @@ namespace LethalDebt.Patches
         [HarmonyPostfix]
         static void ChangeCreditsColorAfterSellingClientRpc()
         {
+            if (terminal.groupCredits < 0) return;
             Plugin.mls.LogDebug("Credits color reverted to default");
             terminal.topRightText.color = terminalCreditsColor;
-        }
-
-        [HarmonyPatch(typeof(Terminal), "Start")]
-        [HarmonyPostfix]
-        static void GetTerminal(Terminal __instance)
-        {
-            terminal = __instance;
-            terminalCreditsColor = terminal.topRightText.color;
-            Utils.SetCreditsColorToDebt();
         }
     }
 }

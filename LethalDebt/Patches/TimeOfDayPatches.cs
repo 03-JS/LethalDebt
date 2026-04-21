@@ -36,7 +36,7 @@ namespace LethalDebt.Patches
         static IEnumerator DisplayDebtReminder(TimeOfDay Instance)
         {
             yield return new WaitForSeconds(3f);
-            HUDManager.Instance.DisplayTip("REMINDER", $"You have {Plugin.Instance.quotaDeadline.Value - Instance.timesFulfilledQuota} quota(s) left to pay off your debt!");
+            HUDManager.Instance.DisplayTip("REMINDER", $"You have {Plugin.Instance.quotaDeadline.Value - Instance.timesFulfilledQuota} quota(s) left to pay off your debt!\nYou currently owe ${TerminalPatches.terminal.groupCredits * Plugin.Instance.debtMultiplier.Value}");
         }
     }
 }

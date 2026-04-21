@@ -29,8 +29,9 @@ namespace LethalDebt
         public const int DEBT_LIMIT = -2147483647; // 32-bit integer limit
         
         // Config
-        public ConfigEntry<int> quotaDeadline;
         public ConfigEntry<string> debtColor;
+        public ConfigEntry<float> debtMultiplier; 
+        public ConfigEntry<int> quotaDeadline;
         public ConfigEntry<bool> applyDeathPenaltyDebt;
 
         void Awake()
@@ -86,6 +87,12 @@ namespace LethalDebt
             {
                 Utils.SetCreditsColorToDebt();
             };
+            debtMultiplier = Config.Bind(
+                "Customization", // Config section
+                "Debt multiplier", // Key of this config
+                1f, // Default value
+                new ConfigDescription("How much money do you want to owe the Company?", new AcceptableValueRange<float>(1f, 4f)) // Description
+            );
             quotaDeadline = Config.Bind(
                 "Customization", // Config section
                 "Deadline", // Key of this config
