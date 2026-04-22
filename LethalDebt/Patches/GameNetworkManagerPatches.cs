@@ -16,5 +16,19 @@ namespace LethalDebt.Patches
             __instance.gameObject.AddComponent<NetworkObject>();
             Plugin.mls.LogDebug("Network Helper has been added");
         }
+
+        [HarmonyPatch(typeof(GameNetworkManager), "SaveGameValues")]
+        [HarmonyPostfix]
+        static void SaveDeadline(GameNetworkManager __instance)
+        {
+            ES3.Save("LethalDebt_Deadline", Plugin.Instance.deadline, __instance.currentSaveFileName);
+        }
+        
+        [HarmonyPatch(typeof(GameNetworkManager), "ResetSavedGameValues")]
+        [HarmonyPostfix]
+        static void ResetDeadline(GameNetworkManager __instance)
+        {
+            ES3.Save("LethalDebt_Deadline", Plugin.Instance.quotaDeadline.Value, __instance.currentSaveFileName);
+        }
     }
 }

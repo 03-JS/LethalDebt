@@ -22,5 +22,12 @@ namespace LethalDebt.Patches
         {
             NetworkHelper.Instance.EnableClientRpc();
         }
+
+        [HarmonyPatch(typeof(StartOfRound), "SetTimeAndPlanetToSavedSettings")]
+        [HarmonyPostfix]
+        static void LoadDeadline()
+        {
+            Plugin.Instance.deadline = ES3.Load<int>("LethalDebt_Deadline", GameNetworkManager.Instance.currentSaveFileName, Plugin.Instance.quotaDeadline.Value);
+        }
     }
 }

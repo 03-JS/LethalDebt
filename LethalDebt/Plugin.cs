@@ -23,7 +23,7 @@ namespace LethalDebt
         internal static ManualLogSource mls;
 
         // Networking
-        public bool enabled;
+        public new bool enabled;
 
         // Deadline
         public int deadline;
@@ -102,7 +102,6 @@ namespace LethalDebt
                 1, // Default value
                 new ConfigDescription("By which quota do you have to pay off your debt?", new AcceptableValueRange<int>(1, 3)) // Description
             );
-            deadline = quotaDeadline.Value;
             applyDeathPenaltyDebt = Config.Bind(
                 "Customization", // Config section
                 "Death penalty counts towards debt", // Key of this config
